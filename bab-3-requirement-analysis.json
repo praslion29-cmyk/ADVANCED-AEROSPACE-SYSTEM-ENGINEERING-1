@@ -1,0 +1,523 @@
+{
+ "judul": "Bab 3 – Requirement Analysis and Systems Architecture",
+ "sub": "TD25602 · Requirement Capture, Decomposition, Allocation, Verification Criteria, Traceability",
+ "bagian": [
+  {
+   "judul": "1. Dasar Requirements Engineering",
+   "poin": [
+    "Need = tujuan pemangku kepentingan; Requirement = pernyataan spesifik yang harus dipenuhi; Specification = dokumen yang mendefinisikan persyaratan teknis.",
+    "Hierarki: Stakeholder → System → Subsystem → Component requirements; setiap persyaratan turunan harus punya alasan jelas.",
+    "Persyaratan adalah kesepakatan teknis antara pengguna, desainer, dan penguji, dan menjadi dasar keputusan desain.",
+    "Siklus hidup: kebutuhan → capture → analisis/validasi → decomposition & allocation → desain → V&V → manajemen perubahan."
+   ]
+  },
+  {
+   "judul": "2. Requirement Capture",
+   "poin": [
+    "Mengumpulkan dan mendokumentasikan kebutuhan stakeholder, bukan sekadar mencatat permintaan; pahami masalah sebenarnya, konteks, batasan, dan konflik.",
+    "Sumber: operasional, pengguna, keselamatan & regulasi, pemeliharaan & dukungan, batasan proyek & lingkungan.",
+    "Teknik: wawancara, observasi operasional, lokakarya, kajian dokumen/regulasi, analisis sistem sejenis.",
+    "Persyaratan baik: jelas, tunggal, terukur, layak, konsisten, dapat diverifikasi, dapat ditelusuri, punya konteks/kondisi berlaku."
+   ]
+  },
+  {
+   "judul": "3. Requirement Decomposition",
+   "poin": [
+    "Menguraikan persyaratan tingkat tinggi menjadi persyaratan rinci; berbeda dari dekomposisi fungsi.",
+    "Langkah: pahami maksud induk → faktor pengaruh → elemen terlibat → rumuskan turunan → cek konsistensi & kelengkapan → tentukan cara pembuktian.",
+    "Hindari over-specification: tetapkan karakteristik, bukan merek atau perangkat, kecuali diwajibkan kontrak/regulasi.",
+    "Nilai numerik turunan harus berasal dari perhitungan, simulasi, dan analisis, bukan ditebak."
+   ]
+  },
+  {
+   "judul": "4. Requirement Allocation",
+   "poin": [
+    "Menetapkan elemen sistem yang bertanggung jawab atas persyaratan; dekomposisi = apa yang diperlukan, alokasi = siapa yang memenuhi.",
+    "Prinsip: kesesuaian tanggung jawab, konsistensi arsitektur, kelengkapan, kejelasan tanggung jawab bersama, keterlacakan, kemampuan verifikasi.",
+    "Anggaran teknis (massa, daya, bandwidth, panas, waktu respons) dibagi dengan margin dan dievaluasi bila ada penyimpangan."
+   ]
+  },
+  {
+   "judul": "5. Verification Criteria",
+   "poin": [
+    "Verifikasi: apakah sistem dibangun sesuai persyaratan? Validasi: apakah sistem memenuhi kebutuhan pengguna?",
+    "Empat metode: Inspection, Analysis, Demonstration, Test; hal kritis keselamatan sering butuh kombinasi.",
+    "Kriteria penerimaan harus objektif, ditetapkan sebelum pengujian, dan memperhitungkan ketidakpastian pengukuran.",
+    "Persyaratan dan metode verifikasinya dirancang bersama sejak awal."
+   ]
+  },
+  {
+   "judul": "6. Traceability & Change Control",
+   "poin": [
+    "Forward traceability: kebutuhan → desain → verifikasi; backward: elemen desain/uji → persyaratan asal.",
+    "RTM: ID unik, sumber, persyaratan induk, elemen sistem, metode verifikasi, status; dipelihara sepanjang siklus hidup.",
+    "Perubahan (mis. 90 → 120 menit) ditelusuri ke seluruh elemen terdampak, lalu change control: usulan, analisis dampak, biaya/jadwal, persetujuan, update konfigurasi, verifikasi ulang.",
+    "RTM lengkap tidak otomatis membuktikan desain benar; perlu analisis, simulasi, inspeksi, dan pengujian."
+   ]
+  }
+ ],
+ "tabel": [
+  {
+   "judul": "Metode verifikasi (IADT)",
+   "kolom": [
+    "Metode",
+    "Cocok untuk",
+    "Contoh bukti"
+   ],
+   "baris": [
+    [
+     "Inspection",
+     "Dimensi, label, keberadaan",
+     "Catatan pengukuran, checklist"
+    ],
+    [
+     "Analysis",
+     "Durasi awal, beban struktur",
+     "Model, simulasi, asumsi terdokumentasi"
+    ],
+    [
+     "Demonstration",
+     "Urutan prosedur, mekanisme",
+     "Rekaman demonstrasi"
+    ],
+    [
+     "Test",
+     "Latensi, respons, sensor",
+     "Data uji, kriteria lulus"
+    ]
+   ]
+  },
+  {
+   "judul": "Contoh RTM UAV pemetaan",
+   "kolom": [
+    "ID",
+    "Persyaratan",
+    "Elemen",
+    "Verifikasi"
+   ],
+   "baris": [
+    [
+     "SYS-001",
+     "Durasi misi sesuai profil",
+     "Propulsi, energi, struktur, payload",
+     "Analisis + uji terbang"
+    ],
+    [
+     "SYS-002",
+     "Citra sesuai kriteria kualitas",
+     "Payload, data",
+     "Uji + analisis data"
+    ],
+    [
+     "SYS-003",
+     "Telemetri ke operator",
+     "Navigasi, FC, komunikasi",
+     "Uji komunikasi"
+    ],
+    [
+     "SYS-004",
+     "Respons kehilangan komunikasi",
+     "Komunikasi, logika keselamatan",
+     "Uji skenario"
+    ]
+   ]
+  }
+ ],
+ "calc": [
+  {
+   "nama": "Anggaran daya (Contoh soal 3)",
+   "in": [
+    [
+     "nav",
+     "Navigasi (W)",
+     15
+    ],
+    [
+     "fc",
+     "Komputer kendali (W)",
+     25
+    ],
+    [
+     "kom",
+     "Komunikasi (W)",
+     20
+    ],
+    [
+     "pay",
+     "Payload (W)",
+     30
+    ],
+    [
+     "bud",
+     "Anggaran (W)",
+     100
+    ],
+    [
+     "res",
+     "Cadangan (%)",
+     10
+    ]
+   ],
+   "out": [
+    [
+     "Total nominal (W)",
+     "nav+fc+kom+pay"
+    ],
+    [
+     "Margin nominal (W)",
+     "bud-(nav+fc+kom+pay)"
+    ],
+    [
+     "Batas nominal dgn cadangan (W)",
+     "bud*(1-res/100)"
+    ],
+    [
+     "Lolos cadangan? (1=ya)",
+     "(nav+fc+kom+pay)<=bud*(1-res/100)?1:0"
+    ]
+   ]
+  },
+  {
+   "nama": "Dampak perubahan durasi (ilustrasi)",
+   "in": [
+    [
+     "P",
+     "Daya rata-rata (W)",
+     150
+    ],
+    [
+     "t0",
+     "Durasi lama (menit)",
+     90
+    ],
+    [
+     "t1",
+     "Durasi baru (menit)",
+     120
+    ],
+    [
+     "eff",
+     "Efisiensi (%)",
+     90
+    ],
+    [
+     "rc",
+     "Cadangan energi (%)",
+     20
+    ]
+   ],
+   "out": [
+    [
+     "Energi lama (Wh)",
+     "P*t0/60/(eff/100)*(1+rc/100)"
+    ],
+    [
+     "Energi baru (Wh)",
+     "P*t1/60/(eff/100)*(1+rc/100)"
+    ],
+    [
+     "Tambahan (%)",
+     "(t1/t0-1)*100"
+    ]
+   ]
+  },
+  {
+   "nama": "Kriteria latensi: rata-rata vs tiap pesan",
+   "in": [
+    [
+     "lim",
+     "Batas (ms)",
+     100
+    ],
+    [
+     "n",
+     "Jumlah sampel",
+     1000
+    ],
+    [
+     "over",
+     "Sampel melebihi batas",
+     3
+    ],
+    [
+     "avg",
+     "Rata-rata (ms)",
+     62
+    ]
+   ],
+   "out": [
+    [
+     "Persen melebihi batas",
+     "over/n*100"
+    ],
+    [
+     "Lulus kriteria rata-rata? (1=ya)",
+     "avg<=lim?1:0"
+    ],
+    [
+     "Lulus kriteria tiap pesan? (1=ya)",
+     "over==0?1:0"
+    ]
+   ]
+  }
+ ],
+ "relasi": [
+  {
+   "id": "STK-01 Durasi misi",
+   "to": [
+    "SYS-001"
+   ]
+  },
+  {
+   "id": "SYS-001",
+   "to": [
+    "SUB-001 Propulsi",
+    "SUB-002 Energi",
+    "SUB-003 Struktur",
+    "SUB-004 Payload"
+   ]
+  },
+  {
+   "id": "SUB-001 Propulsi",
+   "to": [
+    "Analisis performa"
+   ]
+  },
+  {
+   "id": "SUB-002 Energi",
+   "to": [
+    "Analisis energi",
+    "Uji terbang"
+   ]
+  },
+  {
+   "id": "SUB-003 Struktur",
+   "to": [
+    "Analisis massa"
+   ]
+  },
+  {
+   "id": "SUB-004 Payload",
+   "to": [
+    "Anggaran massa & daya"
+   ]
+  },
+  {
+   "id": "STK-02 Citra",
+   "to": [
+    "SYS-002"
+   ]
+  },
+  {
+   "id": "SYS-002",
+   "to": [
+    "Uji sensor",
+    "Analisis data"
+   ]
+  },
+  {
+   "id": "STK-03 Telemetri",
+   "to": [
+    "SYS-003"
+   ]
+  },
+  {
+   "id": "SYS-003",
+   "to": [
+    "Uji latensi"
+   ]
+  },
+  {
+   "id": "STK-04 Kehilangan komunikasi",
+   "to": [
+    "SYS-004"
+   ]
+  },
+  {
+   "id": "SYS-004",
+   "to": [
+    "Uji skenario"
+   ]
+  }
+ ],
+ "contoh": [
+  {
+   "judul": "1. Capture UAV pemetaan banjir",
+   "kasus": "Permintaan: terbang lama, citra jelas, bisa dipantau, aman bila komunikasi putus.",
+   "langkah": [
+    "Ubah jadi STK-01..04 dengan pertanyaan klarifikasi (durasi, payload, cuaca, objek, update rate).",
+    "Libatkan petugas bencana, operator, teknisi, penanggung jawab keselamatan.",
+    "Kumpulkan data untuk target kuantitatif (luas area, kecepatan, waktu belok, cadangan).",
+    "Catat sumber, alasan, prioritas, asumsi, dan pertanyaan terbuka."
+   ],
+   "kes": "Hasil awal belum spesifikasi final; ketidakpastian dicatat agar tidak jadi asumsi tersembunyi."
+  },
+  {
+   "judul": "2. Dekomposisi durasi 90 menit",
+   "kasus": "SYS-001: durasi ≥ 90 menit pada profil misi yang disetujui (angka = asumsi belajar).",
+   "langkah": [
+    "Turunan: PROP001 (gaya dorong), PWR001 (energi + cadangan), STR001 (batas massa), PAY001 (massa & daya payload).",
+    "Nilai numerik dari analisis performa, energi, dan anggaran.",
+    "Perlu model terintegrasi; subsistem lulus terpisah belum membuktikan induk."
+   ],
+   "kes": "Dekomposisi benar mempertahankan hubungan logis dan didukung analisis."
+  },
+  {
+   "judul": "3. Alokasi anggaran daya",
+   "kasus": "Anggaran 100 W; navigasi 15, kontrol 25, komunikasi 20, payload 30.",
+   "langkah": [
+    "Total = 90 W; margin 10 W (10%).",
+    "Dengan cadangan 10%, batas nominal 90 W: pas di batas, tanpa ruang tambahan.",
+    "Periksa beban puncak, temperatur, efisiensi konversi, dan startup."
+   ],
+   "kes": "Alokasi dinilai pada kondisi operasi terdefinisi, bukan hanya jumlah nominal. Coba di tab Lab Hitung."
+  },
+  {
+   "judul": "4. Verifikasi latensi telemetri",
+   "kasus": "Latensi maksimum 100 ms (ilustrasi) pada kondisi jaringan tertentu.",
+   "langkah": [
+    "Lengkapi definisi: jenis pesan, kondisi jaringan, titik awal & akhir ukur.",
+    "Metode utama: Test dengan timestamp tersinkronisasi.",
+    "Kriteria lulus: batas terpenuhi pada semua kondisi dan aturan sampel; bedakan batas per pesan vs rata-rata.",
+    "Dokumentasikan konfigurasi, instrumen, data, anomali, keputusan."
+   ],
+   "kes": "Persyaratan dan metode verifikasi dirancang bersama."
+  },
+  {
+   "judul": "5. RTM dan perubahan durasi",
+   "kasus": "Durasi naik dari 90 ke 120 menit saat desain.",
+   "langkah": [
+    "Telusuri SYS-001 ke propulsi, energi, struktur, payload.",
+    "Cek interaksi: massa, pusat gravitasi, daya, getaran, penyimpanan, komunikasi.",
+    "Perbarui analisis, persyaratan turunan, metode verifikasi; ulang uji terdampak."
+   ],
+   "kes": "Traceability menentukan lingkup dampak dan verifikasi ulang. Coba di tab Peta Relasi."
+  }
+ ],
+ "kuis": [
+  {
+   "q": "Pernyataan 'UAV harus terbang lama' paling tepat disebut ...",
+   "o": [
+    "Persyaratan siap uji",
+    "Kebutuhan yang belum terukur",
+    "Spesifikasi final"
+   ],
+   "a": 1,
+   "e": "Tidak ada durasi atau profil misi, jadi masih kebutuhan kualitatif."
+  },
+  {
+   "q": "Alokasi menjawab pertanyaan ...",
+   "o": [
+    "Persyaratan rinci apa yang diperlukan?",
+    "Elemen mana yang bertanggung jawab?",
+    "Bagaimana cara mengujinya?"
+   ],
+   "a": 1,
+   "e": "Dekomposisi menjawab 'apa yang rinci', alokasi menjawab 'siapa'."
+  },
+  {
+   "q": "Metode verifikasi paling cocok untuk latensi komunikasi adalah ...",
+   "o": [
+    "Inspection",
+    "Demonstration",
+    "Test"
+   ],
+   "a": 2,
+   "e": "Latensi diukur dengan timestamp pada kondisi terdefinisi."
+  },
+  {
+   "q": "Verifikasi berbeda dari validasi karena verifikasi memeriksa ...",
+   "o": [
+    "Kesesuaian dengan persyaratan",
+    "Kepuasan pengguna akhir",
+    "Biaya proyek"
+   ],
+   "a": 0,
+   "e": "Validasi yang memeriksa kesesuaian terhadap kebutuhan pengguna."
+  },
+  {
+   "q": "Menelusuri komponen kembali ke persyaratan asalnya disebut ...",
+   "o": [
+    "Forward traceability",
+    "Backward traceability",
+    "Change control"
+   ],
+   "a": 1,
+   "e": "Backward traceability memberi justifikasi keberadaan elemen desain."
+  },
+  {
+   "q": "Beban 90 W pada anggaran 100 W dengan cadangan 10% berarti ...",
+   "o": [
+    "Ada ruang tambahan 10 W",
+    "Pas di batas nominal",
+    "Melebihi anggaran"
+   ],
+   "a": 1,
+   "e": "Batas nominal = 100 - 10 = 90 W."
+  },
+  {
+   "q": "Mengapa menetapkan satu model GNSS receiver terlalu dini berisiko?",
+   "o": [
+    "Mengurangi fleksibilitas dan memunculkan biaya tak perlu",
+    "Membuat RTM tidak dapat dibuat",
+    "Melanggar metode Inspection"
+   ],
+   "a": 0,
+   "e": "Itu over-specification, kecuali diwajibkan kontrak atau regulasi."
+  }
+ ],
+ "gl": [
+  [
+   "Need",
+   "Masalah/tujuan/kemampuan yang diperlukan stakeholder."
+  ],
+  [
+   "Requirement",
+   "Pernyataan spesifik kondisi, kemampuan, atau batasan yang harus dipenuhi."
+  ],
+  [
+   "Specification",
+   "Dokumen yang mendefinisikan persyaratan teknis pada tingkat tertentu."
+  ],
+  [
+   "Stakeholder",
+   "Pihak yang memengaruhi, menggunakan, atau terdampak sistem."
+  ],
+  [
+   "Requirement capture",
+   "Proses mengidentifikasi dan mendokumentasikan kebutuhan stakeholder."
+  ],
+  [
+   "Decomposition",
+   "Menguraikan persyaratan tinggi menjadi rinci."
+  ],
+  [
+   "Allocation",
+   "Menetapkan elemen penanggung jawab persyaratan."
+  ],
+  [
+   "Technical budget",
+   "Batas sumber daya (massa, daya, bandwidth) yang dibagi antar elemen."
+  ],
+  [
+   "Verification",
+   "Bukti objektif bahwa sistem memenuhi persyaratan."
+  ],
+  [
+   "Validation",
+   "Pemeriksaan apakah sistem memenuhi kebutuhan pengguna."
+  ],
+  [
+   "RTM",
+   "Requirements Traceability Matrix: tabel hubungan kebutuhan, persyaratan, desain, verifikasi."
+  ],
+  [
+   "Change control",
+   "Pengendalian perubahan: usulan, dampak, persetujuan, update, verifikasi ulang."
+  ],
+  [
+   "Over-specification",
+   "Menetapkan detail implementasi terlalu dini tanpa alasan teknis."
+  ]
+ ]
+}
