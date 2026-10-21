@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Advanced Aerospace Systems Engineering Lab</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<style>
+:root{--bg:#eef3fb;--card:#fff;--ink:#0b1b33;--mut:#51627d;--line:#dbe4f3;--acc:#0b6fa4;--acc2:#c2410c;--soft:#e0e9fb;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1424;--card:#142038;--ink:#e6edf8;--mut:#9fb0cc;--line:#26365a;--acc:#5ec2f2;--acc2:#fb923c;--soft:#1b2c4d}}
+:root[data-theme="dark"]{--bg:#0c1424;--card:#142038;--ink:#e6edf8;--mut:#9fb0cc;--line:#26365a;--acc:#5ec2f2;--acc2:#fb923c;--soft:#1b2c4d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.5}
+header{background:linear-gradient(120deg,#0b3d91,#0891d1 60%,#7c3aed);color:#fff;padding:18px 20px 0}
+h1{font-family:Georgia,serif;font-size:clamp(17px,3vw,26px);margin:0;text-transform:uppercase}
+header p{margin:4px 0 12px;font-size:13px;opacity:.92}
+nav{display:flex;gap:6px;overflow-x:auto}
+nav button{border:0;background:rgba(255,255,255,.2);color:#fff;padding:10px 14px;border-radius:10px 10px 0 0;font-weight:600;cursor:pointer;white-space:nowrap}
+nav button.on{background:var(--card);color:var(--acc2)}
+main{max-width:1100px;margin:0 auto;padding:16px}
+.tab{display:none}.tab.on{display:block}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}
+.stat{background:var(--soft);border-top:4px solid var(--acc);border-radius:8px;padding:10px 12px}.stat b{display:block;font-size:22px;color:var(--acc)}
+.card{background:var(--card);border-left:4px solid var(--acc);border-radius:8px;padding:14px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.bar{height:12px;background:var(--soft);border-radius:8px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#0891d1,#7c3aed);transition:width .3s}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--acc);border-radius:6px;padding:6px 8px}
+textarea{width:100%;min-height:220px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+label{display:block;font-size:13px;color:var(--mut)}label input{width:100%;margin-top:3px}
+.out{background:var(--soft);padding:8px 12px;border-radius:8px;margin:8px 0;font-family:Consolas,monospace;font-size:14px}
+.btn,.opt{border:1px solid var(--acc);background:var(--acc);color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+.btn.alt{background:var(--card);color:var(--acc)}
+.opt{display:block;width:100%;text-align:left;margin:5px 0;background:var(--card);color:var(--ink);border-color:var(--line);font-weight:400}
+.ok{border-color:#16a34a!important;background:rgba(22,163,74,.15)!important}.no{border-color:#dc2626!important;background:rgba(220,38,38,.15)!important}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}th{background:var(--soft)}
+.wrap{overflow-x:auto}
+.node{display:inline-block;margin:3px;padding:6px 10px;border-radius:8px;border:1px solid var(--acc);cursor:pointer;background:var(--card);color:var(--ink);font-size:13px}
+.node.hit{background:var(--acc2);color:#fff;border-color:var(--acc2)}.node.src{background:var(--acc);color:#fff}
+dt{font-weight:700;color:var(--acc)}dd{margin:0 0 10px}details{margin:8px 0}summary{cursor:pointer;font-weight:700}
+.mut{color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+<header>
+<h1>Advanced Aerospace Systems Engineering</h1>
+<p id="sub">Material-driven Lab · input materi, lalu semua yang dipelajari ditampilkan</p>
+<nav id="nav"></nav>
+</header>
+<main>
+<section class="tab on" id="t-dash"></section>
+<section class="tab" id="t-sum"></section>
+<section class="tab" id="t-calc"></section>
+<section class="tab" id="t-rel"></section>
+<section class="tab" id="t-case"></section>
+<section class="tab" id="t-quiz"></section>
+<section class="tab" id="t-gl"></section>
+<section class="tab" id="t-in">
+<div class="card"><b>Input Materi</b>
+<p class="mut">Pilih file PDF (atau .txt / .md) langsung, teksnya dibaca otomatis; atau tempel teks manual. PDF hasil scan (berupa gambar) tidak bisa dibaca. Claude akan mengolahnya menjadi ringkasan, glosarium, kalkulator, peta relasi, studi kasus, dan kuis. Teks lebih dari 60.000 karakter dipotong.</p>
+<textarea id="src" placeholder="Tempel materi di sini..."></textarea>
+<p><input type="file" id="file" accept=".pdf,.txt,.md,application/pdf,text/plain"></p>
+<div class="grid" style="margin:10px 0"><label>API key Anthropic (untuk mode GitHub / di luar claude.ai)<input type="password" id="key" placeholder="sk-ant-..." autocomplete="off"></label><label>Model<input id="model" value="claude-sonnet-5-5"></label></div>
+<p class="mut">Di link claude.ai kolom ini tidak perlu diisi. Di GitHub Pages, key disimpan hanya di browser lo sendiri dan dikirim langsung ke api.anthropic.com. Jangan pakai di komputer umum.</p>
+<p><button class="btn" id="go">Proses materi</button> <button class="btn alt" id="exp">Ekspor hasil (JSON)</button> <button class="btn alt" id="imp">Impor hasil</button><input type="file" id="impf" accept=".json,application/json" style="display:none"> <button class="btn alt" id="reset">Kembali ke contoh (Bab 3)</button></p>
+<div class="out" id="status">Siap.</div></div>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const DEFAULT={judul:"Bab 3 – Requirement Analysis and Systems Architecture",sub:"TD25602 · Requirement Capture, Decomposition, Allocation, Verification Criteria, Traceability",
+bagian:[
+{judul:"1. Dasar Requirements Engineering",poin:["Need = tujuan pemangku kepentingan; Requirement = pernyataan spesifik yang harus dipenuhi; Specification = dokumen yang mendefinisikan persyaratan teknis.","Hierarki: Stakeholder → System → Subsystem → Component requirements; setiap persyaratan turunan harus punya alasan jelas.","Persyaratan adalah kesepakatan teknis antara pengguna, desainer, dan penguji, dan menjadi dasar keputusan desain.","Siklus hidup: kebutuhan → capture → analisis/validasi → decomposition & allocation → desain → V&V → manajemen perubahan."]},
+{judul:"2. Requirement Capture",poin:["Mengumpulkan dan mendokumentasikan kebutuhan stakeholder, bukan sekadar mencatat permintaan; pahami masalah sebenarnya, konteks, batasan, dan konflik.","Sumber: operasional, pengguna, keselamatan & regulasi, pemeliharaan & dukungan, batasan proyek & lingkungan.","Teknik: wawancara, observasi operasional, lokakarya, kajian dokumen/regulasi, analisis sistem sejenis.","Persyaratan baik: jelas, tunggal, terukur, layak, konsisten, dapat diverifikasi, dapat ditelusuri, punya konteks/kondisi berlaku."]},
+{judul:"3. Requirement Decomposition",poin:["Menguraikan persyaratan tingkat tinggi menjadi persyaratan rinci; berbeda dari dekomposisi fungsi.","Langkah: pahami maksud induk → faktor pengaruh → elemen terlibat → rumuskan turunan → cek konsistensi & kelengkapan → tentukan cara pembuktian.","Hindari over-specification: tetapkan karakteristik, bukan merek atau perangkat, kecuali diwajibkan kontrak/regulasi.","Nilai numerik turunan harus berasal dari perhitungan, simulasi, dan analisis, bukan ditebak."]},
+{judul:"4. Requirement Allocation",poin:["Menetapkan elemen sistem yang bertanggung jawab atas persyaratan; dekomposisi = apa yang diperlukan, alokasi = siapa yang memenuhi.","Prinsip: kesesuaian tanggung jawab, konsistensi arsitektur, kelengkapan, kejelasan tanggung jawab bersama, keterlacakan, kemampuan verifikasi.","Anggaran teknis (massa, daya, bandwidth, panas, waktu respons) dibagi dengan margin dan dievaluasi bila ada penyimpangan."]},
+{judul:"5. Verification Criteria",poin:["Verifikasi: apakah sistem dibangun sesuai persyaratan? Validasi: apakah sistem memenuhi kebutuhan pengguna?","Empat metode: Inspection, Analysis, Demonstration, Test; hal kritis keselamatan sering butuh kombinasi.","Kriteria penerimaan harus objektif, ditetapkan sebelum pengujian, dan memperhitungkan ketidakpastian pengukuran.","Persyaratan dan metode verifikasinya dirancang bersama sejak awal."]},
+{judul:"6. Traceability & Change Control",poin:["Forward traceability: kebutuhan → desain → verifikasi; backward: elemen desain/uji → persyaratan asal.","RTM: ID unik, sumber, persyaratan induk, elemen sistem, metode verifikasi, status; dipelihara sepanjang siklus hidup.","Perubahan (mis. 90 → 120 menit) ditelusuri ke seluruh elemen terdampak, lalu change control: usulan, analisis dampak, biaya/jadwal, persetujuan, update konfigurasi, verifikasi ulang.","RTM lengkap tidak otomatis membuktikan desain benar; perlu analisis, simulasi, inspeksi, dan pengujian."]}],
+tabel:[
+{judul:"Metode verifikasi (IADT)",kolom:["Metode","Cocok untuk","Contoh bukti"],baris:[["Inspection","Dimensi, label, keberadaan","Catatan pengukuran, checklist"],["Analysis","Durasi awal, beban struktur","Model, simulasi, asumsi terdokumentasi"],["Demonstration","Urutan prosedur, mekanisme","Rekaman demonstrasi"],["Test","Latensi, respons, sensor","Data uji, kriteria lulus"]]},
+{judul:"Contoh RTM UAV pemetaan",kolom:["ID","Persyaratan","Elemen","Verifikasi"],baris:[["SYS-001","Durasi misi sesuai profil","Propulsi, energi, struktur, payload","Analisis + uji terbang"],["SYS-002","Citra sesuai kriteria kualitas","Payload, data","Uji + analisis data"],["SYS-003","Telemetri ke operator","Navigasi, FC, komunikasi","Uji komunikasi"],["SYS-004","Respons kehilangan komunikasi","Komunikasi, logika keselamatan","Uji skenario"]]}],
+calc:[
+{nama:"Anggaran daya (Contoh soal 3)",in:[["nav","Navigasi (W)",15],["fc","Komputer kendali (W)",25],["kom","Komunikasi (W)",20],["pay","Payload (W)",30],["bud","Anggaran (W)",100],["res","Cadangan (%)",10]],
+ out:[["Total nominal (W)","nav+fc+kom+pay"],["Margin nominal (W)","bud-(nav+fc+kom+pay)"],["Batas nominal dgn cadangan (W)","bud*(1-res/100)"],["Lolos cadangan? (1=ya)","(nav+fc+kom+pay)<=bud*(1-res/100)?1:0"]]},
+{nama:"Dampak perubahan durasi (ilustrasi)",in:[["P","Daya rata-rata (W)",150],["t0","Durasi lama (menit)",90],["t1","Durasi baru (menit)",120],["eff","Efisiensi (%)",90],["rc","Cadangan energi (%)",20]],
+ out:[["Energi lama (Wh)","P*t0/60/(eff/100)*(1+rc/100)"],["Energi baru (Wh)","P*t1/60/(eff/100)*(1+rc/100)"],["Tambahan (%)","(t1/t0-1)*100"]]},
+{nama:"Kriteria latensi: rata-rata vs tiap pesan",in:[["lim","Batas (ms)",100],["n","Jumlah sampel",1000],["over","Sampel melebihi batas",3],["avg","Rata-rata (ms)",62]],
+ out:[["Persen melebihi batas","over/n*100"],["Lulus kriteria rata-rata? (1=ya)","avg<=lim?1:0"],["Lulus kriteria tiap pesan? (1=ya)","over==0?1:0"]]}],
+relasi:[{id:"STK-01 Durasi misi",to:["SYS-001"]},{id:"SYS-001",to:["SUB-001 Propulsi","SUB-002 Energi","SUB-003 Struktur","SUB-004 Payload"]},{id:"SUB-001 Propulsi",to:["Analisis performa"]},{id:"SUB-002 Energi",to:["Analisis energi","Uji terbang"]},{id:"SUB-003 Struktur",to:["Analisis massa"]},{id:"SUB-004 Payload",to:["Anggaran massa & daya"]},{id:"STK-02 Citra",to:["SYS-002"]},{id:"SYS-002",to:["Uji sensor","Analisis data"]},{id:"STK-03 Telemetri",to:["SYS-003"]},{id:"SYS-003",to:["Uji latensi"]},{id:"STK-04 Kehilangan komunikasi",to:["SYS-004"]},{id:"SYS-004",to:["Uji skenario"]}],
+contoh:[
+{judul:"1. Capture UAV pemetaan banjir",kasus:"Permintaan: terbang lama, citra jelas, bisa dipantau, aman bila komunikasi putus.",langkah:["Ubah jadi STK-01..04 dengan pertanyaan klarifikasi (durasi, payload, cuaca, objek, update rate).","Libatkan petugas bencana, operator, teknisi, penanggung jawab keselamatan.","Kumpulkan data untuk target kuantitatif (luas area, kecepatan, waktu belok, cadangan).","Catat sumber, alasan, prioritas, asumsi, dan pertanyaan terbuka."],kes:"Hasil awal belum spesifikasi final; ketidakpastian dicatat agar tidak jadi asumsi tersembunyi."},
+{judul:"2. Dekomposisi durasi 90 menit",kasus:"SYS-001: durasi ≥ 90 menit pada profil misi yang disetujui (angka = asumsi belajar).",langkah:["Turunan: PROP001 (gaya dorong), PWR001 (energi + cadangan), STR001 (batas massa), PAY001 (massa & daya payload).","Nilai numerik dari analisis performa, energi, dan anggaran.","Perlu model terintegrasi; subsistem lulus terpisah belum membuktikan induk."],kes:"Dekomposisi benar mempertahankan hubungan logis dan didukung analisis."},
+{judul:"3. Alokasi anggaran daya",kasus:"Anggaran 100 W; navigasi 15, kontrol 25, komunikasi 20, payload 30.",langkah:["Total = 90 W; margin 10 W (10%).","Dengan cadangan 10%, batas nominal 90 W: pas di batas, tanpa ruang tambahan.","Periksa beban puncak, temperatur, efisiensi konversi, dan startup."],kes:"Alokasi dinilai pada kondisi operasi terdefinisi, bukan hanya jumlah nominal. Coba di tab Lab Hitung."},
+{judul:"4. Verifikasi latensi telemetri",kasus:"Latensi maksimum 100 ms (ilustrasi) pada kondisi jaringan tertentu.",langkah:["Lengkapi definisi: jenis pesan, kondisi jaringan, titik awal & akhir ukur.","Metode utama: Test dengan timestamp tersinkronisasi.","Kriteria lulus: batas terpenuhi pada semua kondisi dan aturan sampel; bedakan batas per pesan vs rata-rata.","Dokumentasikan konfigurasi, instrumen, data, anomali, keputusan."],kes:"Persyaratan dan metode verifikasi dirancang bersama."},
+{judul:"5. RTM dan perubahan durasi",kasus:"Durasi naik dari 90 ke 120 menit saat desain.",langkah:["Telusuri SYS-001 ke propulsi, energi, struktur, payload.","Cek interaksi: massa, pusat gravitasi, daya, getaran, penyimpanan, komunikasi.","Perbarui analisis, persyaratan turunan, metode verifikasi; ulang uji terdampak."],kes:"Traceability menentukan lingkup dampak dan verifikasi ulang. Coba di tab Peta Relasi."}],
+kuis:[
+{q:"Pernyataan 'UAV harus terbang lama' paling tepat disebut ...",o:["Persyaratan siap uji","Kebutuhan yang belum terukur","Spesifikasi final"],a:1,e:"Tidak ada durasi atau profil misi, jadi masih kebutuhan kualitatif."},
+{q:"Alokasi menjawab pertanyaan ...",o:["Persyaratan rinci apa yang diperlukan?","Elemen mana yang bertanggung jawab?","Bagaimana cara mengujinya?"],a:1,e:"Dekomposisi menjawab 'apa yang rinci', alokasi menjawab 'siapa'."},
+{q:"Metode verifikasi paling cocok untuk latensi komunikasi adalah ...",o:["Inspection","Demonstration","Test"],a:2,e:"Latensi diukur dengan timestamp pada kondisi terdefinisi."},
+{q:"Verifikasi berbeda dari validasi karena verifikasi memeriksa ...",o:["Kesesuaian dengan persyaratan","Kepuasan pengguna akhir","Biaya proyek"],a:0,e:"Validasi yang memeriksa kesesuaian terhadap kebutuhan pengguna."},
+{q:"Menelusuri komponen kembali ke persyaratan asalnya disebut ...",o:["Forward traceability","Backward traceability","Change control"],a:1,e:"Backward traceability memberi justifikasi keberadaan elemen desain."},
+{q:"Beban 90 W pada anggaran 100 W dengan cadangan 10% berarti ...",o:["Ada ruang tambahan 10 W","Pas di batas nominal","Melebihi anggaran"],a:1,e:"Batas nominal = 100 - 10 = 90 W."},
+{q:"Mengapa menetapkan satu model GNSS receiver terlalu dini berisiko?",o:["Mengurangi fleksibilitas dan memunculkan biaya tak perlu","Membuat RTM tidak dapat dibuat","Melanggar metode Inspection"],a:0,e:"Itu over-specification, kecuali diwajibkan kontrak atau regulasi."}],
+gl:[["Need","Masalah/tujuan/kemampuan yang diperlukan stakeholder."],["Requirement","Pernyataan spesifik kondisi, kemampuan, atau batasan yang harus dipenuhi."],["Specification","Dokumen yang mendefinisikan persyaratan teknis pada tingkat tertentu."],["Stakeholder","Pihak yang memengaruhi, menggunakan, atau terdampak sistem."],["Requirement capture","Proses mengidentifikasi dan mendokumentasikan kebutuhan stakeholder."],["Decomposition","Menguraikan persyaratan tinggi menjadi rinci."],["Allocation","Menetapkan elemen penanggung jawab persyaratan."],["Technical budget","Batas sumber daya (massa, daya, bandwidth) yang dibagi antar elemen."],["Verification","Bukti objektif bahwa sistem memenuhi persyaratan."],["Validation","Pemeriksaan apakah sistem memenuhi kebutuhan pengguna."],["RTM","Requirements Traceability Matrix: tabel hubungan kebutuhan, persyaratan, desain, verifikasi."],["Change control","Pengendalian perubahan: usulan, dampak, persetujuan, update, verifikasi ulang."],["Over-specification","Menetapkan detail implementasi terlalu dini tanpa alasan teknis."]]};
+let P=DEFAULT,S={st:{},qz:{}};
+try{const r=localStorage.getItem('aero-pack');if(r)P=JSON.parse(r);const s=localStorage.getItem('aero-st');if(s)S=JSON.parse(s)}catch(e){}
+const sv=()=>{try{localStorage.setItem('aero-st',JSON.stringify(S))}catch(e){}};
+const TABS=[["dash","Dashboard"],["sum","Ringkasan"],["calc","Lab Hitung"],["rel","Peta Relasi"],["case","Studi Kasus"],["quiz","Kuis"],["gl","Glosarium"],["in","Input Materi"]];
+$('nav').innerHTML=TABS.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join('');
+function show(t){document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('on',e.id==='t-'+t));document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===t))}
+$('nav').onclick=e=>{if(e.target.dataset.t)show(e.target.dataset.t)};
+const arr=x=>Array.isArray(x)?x:[];
+const key=s=>(P.judul||'')+'|'+s;
+function tbl(t){return `<div class="wrap"><b>${esc(t.judul)}</b><table><tr>${arr(t.kolom).map(c=>`<th>${esc(c)}</th>`).join('')}</tr>${arr(t.baris).map(r=>`<tr>${arr(r).map(c=>`<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</table></div>`}
+function dash(){
+ const B=arr(P.bagian),ST=["Belum dimulai","Sedang dipelajari","Selesai"],done=B.filter((b,i)=>S.st[key(b.judul)]===2).length,cur=B.findIndex(b=>S.st[key(b.judul)]===1);
+ const qk=arr(P.kuis).filter((q,i)=>S.qz[key('q'+i)]).length,sc=B.reduce((a,b)=>a+(S.st[key(b.judul)]||0),0),p=B.length?Math.round(sc/(B.length*2)*100):0;
+ $('sub').textContent=P.sub||'Material-driven Lab';
+ $('t-dash').innerHTML=`<div class="card"><b>${esc(P.judul)}</b></div><div class="stats"><div class="stat">Bagian<b>${B.length}</b></div><div class="stat">Selesai<b>${done}</b></div><div class="stat">Topik saat ini<b>${cur<0?'-':cur+1}</b></div><div class="stat">Konsep<b>${arr(P.gl).length}</b></div><div class="stat">Kuis benar<b>${qk}/${arr(P.kuis).length}</b></div><div class="stat">Progres<b>${p}%</b></div></div>
+ <div class="card"><b>Progres keseluruhan</b><div class="bar" style="margin-top:8px"><i style="width:${p}%"></i></div></div>
+ <div class="card"><b>Roadmap belajar</b>${B.map((b,i)=>`<div class="row"><span>${esc(b.judul)}</span><select data-k="${esc(key(b.judul))}">${ST.map((s,j)=>`<option value="${j}"${(S.st[key(b.judul)]||0)===j?' selected':''}>${s}</option>`).join('')}</select></div>`).join('')}</div>`}
+$('t-dash').onchange=e=>{if(e.target.dataset.k){S.st[e.target.dataset.k]=+e.target.value;sv();dash()}};
+function sum(){$('t-sum').innerHTML=arr(P.bagian).map(b=>`<div class="card"><b>${esc(b.judul)}</b><ul>${arr(b.poin).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')+arr(P.tabel).map(t=>`<div class="card">${tbl(t)}</div>`).join('')}
+/* Calculators: ekspresi dievaluasi hanya jika lolos whitelist karakter */
+function ev(expr,vars){if(!/^[\w\s+\-*\/().,%<>=?:&|!]+$/.test(expr))return NaN;try{return new Function(...Object.keys(vars),'with(Math){return ('+expr+')}')(...Object.values(vars))}catch(e){return NaN}}
+function calc(){const C=arr(P.calc);$('t-calc').innerHTML=C.length?C.map((c,ci)=>`<div class="card" data-c="${ci}"><b>${esc(c.nama)}</b><div class="grid" style="margin:10px 0">${arr(c.in).map(f=>`<label>${esc(f[1])}<input type="number" step="any" data-id="${esc(f[0])}" value="${esc(f[2])}"></label>`).join('')}</div><div class="out"></div></div>`).join(''):'<div class="card">Materi ini tidak memuat rumus atau perhitungan.</div>';
+ document.querySelectorAll('#t-calc .card[data-c]').forEach(upd)}
+function upd(card){const c=P.calc[+card.dataset.c],v={};card.querySelectorAll('input').forEach(i=>v[i.dataset.id]=parseFloat(i.value));
+ card.querySelector('.out').innerHTML=arr(c.out).map(o=>{const r=ev(o[1],v);return `${esc(o[0])}: <b>${Number.isFinite(+r)?(+r).toLocaleString('id-ID',{maximumFractionDigits:3}):'-'}</b>`}).join('<br>')}
+$('t-calc').oninput=e=>upd(e.target.closest('.card'));
+/* Peta relasi */
+function rel(){const R=arr(P.relasi);if(!R.length){$('t-rel').innerHTML='<div class="card">Materi ini tidak memuat relasi antar elemen.</div>';return}
+ const ids=[...new Set(R.flatMap(r=>[r.id,...arr(r.to)]))];
+ $('t-rel').innerHTML=`<div class="card"><b>Peta Relasi / Traceability</b><p class="mut">Klik sebuah elemen untuk melihat apa saja yang terdampak jika elemen itu berubah (biru = yang diubah, oranye = terdampak).</p><div id="nodes">${ids.map(i=>`<span class="node" data-n="${esc(i)}">${esc(i)}</span>`).join('')}</div><div class="out" id="impact">Pilih elemen.</div></div>`}
+$('t-rel').onclick=e=>{const n=e.target.dataset.n;if(!n)return;const g={};arr(P.relasi).forEach(r=>g[r.id]=arr(r.to));const seen=new Set(),q=[n];while(q.length){const x=q.shift();for(const y of g[x]||[])if(!seen.has(y)){seen.add(y);q.push(y)}}
+ document.querySelectorAll('.node').forEach(d=>{d.classList.toggle('src',d.dataset.n===n);d.classList.toggle('hit',seen.has(d.dataset.n))});
+ $('impact').textContent=seen.size?`Perubahan pada "${n}" berdampak ke ${seen.size} elemen: ${[...seen].join(', ')}`:`"${n}" tidak memiliki elemen turunan.`};
+function cases(){$('t-case').innerHTML=arr(P.contoh).map(c=>`<details class="card"><summary>${esc(c.judul)}</summary><p>${esc(c.kasus)}</p><ol>${arr(c.langkah).map(l=>`<li>${esc(l)}</li>`).join('')}</ol><p><b>Kesimpulan:</b> ${esc(c.kes)}</p></details>`).join('')||'<div class="card">Tidak ada studi kasus.</div>'}
+function quiz(){$('t-quiz').innerHTML=`<div class="card">${arr(P.kuis).map((q,i)=>`<div style="margin-bottom:14px"><b>${i+1}. ${esc(q.q)}</b>${arr(q.o).map((o,j)=>`<button class="opt ${S.qz[key('q'+i)]&&j===q.a?'ok':''}" data-q="${i}" data-o="${j}">${esc(o)}</button>`).join('')}<div class="mut" id="ex${i}">${S.qz[key('q'+i)]?esc(q.e):''}</div></div>`).join('')||'Tidak ada kuis.'}</div>`}
+$('t-quiz').onclick=e=>{const b=e.target.closest('.opt');if(!b)return;const i=+b.dataset.q,q=P.kuis[i];if(+b.dataset.o===q.a){S.qz[key('q'+i)]=true;sv();quiz();dash()}else{b.classList.add('no');$('ex'+i).textContent='Belum tepat, coba lagi.'}};
+function gl(){$('t-gl').innerHTML=`<div class="card"><input id="q" placeholder="Cari istilah..." style="width:100%;margin-bottom:10px"><dl id="gll"></dl></div>`;const f=()=>{const q=$('q').value.toLowerCase();$('gll').innerHTML=arr(P.gl).filter(g=>(g[0]+g[1]).toLowerCase().includes(q)).map(g=>`<dt>${esc(g[0])}</dt><dd>${esc(g[1])}</dd>`).join('')};$('q').oninput=f;f()}
+function all(){dash();sum();calc();rel();cases();quiz();gl()}
+/* Input materi -> Claude */
+async function pdfText(f){if(!window.pdfjsLib)throw new Error('pembaca PDF gagal dimuat');pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+ const d=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise,out=[];
+ for(let i=1;i<=d.numPages;i++){$('status').textContent='Membaca PDF... halaman '+i+'/'+d.numPages;const c=await(await d.getPage(i)).getTextContent();out.push(c.items.map(x=>x.str).join(' '))}
+ return out.join('\n\n')}
+$('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;
+ try{if(/\.pdf$/i.test(f.name)||f.type==='application/pdf'){const t=await pdfText(f);if(t.trim().length<200){$('status').textContent='Teks PDF kosong (mungkin hasil scan). Coba PDF lain atau tempel manual.';return}$('src').value=t;$('status').textContent='PDF terbaca: '+t.length.toLocaleString('id-ID')+' karakter. Klik Proses materi.'}else{$('src').value=await f.text();$('status').textContent='File terbaca.'}}
+ catch(err){$('status').textContent='Gagal membaca file: '+(err.message||err)+'. Coba tempel teks manual.'}};
+$('reset').onclick=()=>{P=DEFAULT;try{localStorage.removeItem('aero-pack')}catch(e){}all();$('status').textContent='Kembali ke materi contoh.'};
+const PROMPT=`Kamu mengubah materi kuliah menjadi data untuk dashboard belajar. Jawab HANYA dengan satu objek JSON valid (tanpa markdown), bahasa Indonesia, semua isi diambil dari materi (jangan menambah fakta). Skema:
+{"judul":str,"sub":str,"bagian":[{"judul":str,"poin":[str]}] (maks 10 bagian, 3-6 poin padat),"tabel":[{"judul":str,"kolom":[str],"baris":[[str]]}] (maks 4),"calc":[{"nama":str,"in":[[id,label,nilaiDefault]],"out":[[label,ekspresi]]}] (hanya jika materi punya rumus/contoh hitung, maks 4; id huruf/angka saja; ekspresi JavaScript aritmetika memakai id, boleh ?: dan fungsi Math),"relasi":[{"id":str,"to":[str]}] (hubungan sebab/turunan/ketergantungan antar elemen, jika ada),"contoh":[{"judul":str,"kasus":str,"langkah":[str],"kes":str}] (maks 6),"kuis":[{"q":str,"o":[str,str,str],"a":indeksBenar,"e":penjelasan}] (8 soal),"gl":[[istilah,definisi]] (maks 20)}
+Materi:
+`;
+$('go').onclick=async()=>{const txt=$('src').value.trim().slice(0,60000);if(txt.length<200){$('status').textContent='Teks terlalu pendek.';return}
+ $('go').disabled=true;$('status').textContent='Menghubungi Claude...';
+ try{const sample=window.claude?await window.claude.use('sample'):null;let r;
+  if(sample){r=await sample(PROMPT+txt,{modelTier:'default',cache:false,onText:({text})=>{$('status').textContent='Mengolah materi... '+text.length+' karakter'}})}
+  else{const k=$('key').value.trim();if(!k){$('status').textContent='Isi API key Anthropic di kolom di atas (mode di luar claude.ai), atau buka lewat link claude.ai.';return}
+   try{localStorage.setItem('aero-key',k);localStorage.setItem('aero-model',$('model').value.trim())}catch(e){}
+   $('status').textContent='Mengirim ke Claude, mohon tunggu (bisa 1-2 menit)...';
+   const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:$('model').value.trim()||'claude-sonnet-5-5',max_tokens:8000,messages:[{role:'user',content:PROMPT+txt}]})});
+   const d=await res.json();if(!res.ok)throw new Error((d.error&&d.error.message)||('HTTP '+res.status));
+   r={text:d.content.map(c=>c.text||'').join(''),truncated:d.stop_reason==='max_tokens'}}
+  const m=r.text.replace(/```json|```/g,'').trim(),j=JSON.parse(m.slice(m.indexOf('{'),m.lastIndexOf('}')+1));
+  if(!arr(j.bagian).length)throw new Error('struktur tidak lengkap');
+  P=j;try{localStorage.setItem('aero-pack',JSON.stringify(P))}catch(e){}all();show('dash');$('status').textContent='Selesai: '+arr(P.bagian).length+' bagian, '+arr(P.gl).length+' istilah, '+arr(P.kuis).length+' soal.'+(r.truncated?' (hasil terpotong)':'')}
+ catch(e){$('status').textContent='Gagal: '+(e.message||e.code||e)+'. Coba lagi atau perpendek teks.'}
+ finally{$('go').disabled=false}};
+$('exp').onclick=async()=>{const name=(P.judul||'materi').replace(/[^\w]+/g,'_').slice(0,40)+'.json',data=JSON.stringify(P,null,1);
+ try{const dl=window.claude?await window.claude.use('downloads'):null;if(dl){await dl.save({filename:name,data});return}}catch(e){if(e&&e.code==='declined')return}
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('imp').onclick=()=>$('impf').click();
+$('impf').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());if(!arr(j.bagian).length)throw new Error('bukan file hasil lab');P=j;try{localStorage.setItem('aero-pack',JSON.stringify(P))}catch(x){}all();show('dash');$('status').textContent='Impor berhasil: '+(P.judul||'')}catch(err){$('status').textContent='Gagal impor: '+err.message}};
+try{$('key').value=localStorage.getItem('aero-key')||'';$('model').value=localStorage.getItem('aero-model')||$('model').value}catch(e){}
+all();show('dash');
+</script>
+</body>
+</html>
