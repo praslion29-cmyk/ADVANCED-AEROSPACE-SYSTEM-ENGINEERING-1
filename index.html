@@ -45,6 +45,7 @@ dt{font-weight:700;color:var(--acc)}dd{margin:0 0 10px}details{margin:8px 0}summ
 <header>
 <h1>Advanced Aerospace Systems Engineering</h1>
 <p id="sub">Material-driven Lab · input materi, lalu semua yang dipelajari ditampilkan</p>
+<select id="lib" style="display:none;margin-bottom:10px"></select>
 <nav id="nav"></nav>
 </header>
 <main>
@@ -174,6 +175,11 @@ $('exp').onclick=async()=>{const name=(P.judul||'materi').replace(/[^\w]+/g,'_')
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
 $('imp').onclick=()=>$('impf').click();
 $('impf').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const j=JSON.parse(await f.text());if(!arr(j.bagian).length)throw new Error('bukan file hasil lab');P=j;try{localStorage.setItem('aero-pack',JSON.stringify(P))}catch(x){}all();show('dash');$('status').textContent='Impor berhasil: '+(P.judul||'')}catch(err){$('status').textContent='Gagal impor: '+err.message}};
+(async()=>{try{const r=await fetch('materi/index.json',{cache:'no-store'});if(!r.ok)return;const L=await r.json();if(!arr(L).length)return;const s=$('lib');
+ const load=async m=>{const x=await fetch('materi/'+encodeURI(m.file),{cache:'no-store'});const j=await x.json();if(!arr(j.bagian).length)throw new Error('format salah');P=j;try{localStorage.setItem('aero-pack',JSON.stringify(P))}catch(e){}all();show('dash')};
+ s.innerHTML='<option value="">Pilih materi dari perpustakaan...</option>'+L.map((m,i)=>`<option value="${i}">${esc(m.nama)}</option>`).join('');s.style.display='';
+ s.onchange=async()=>{if(s.value==='')return;try{await load(L[+s.value])}catch(e){$('status').textContent='Gagal memuat materi: '+e.message}};
+ let saved=null;try{saved=localStorage.getItem('aero-pack')}catch(e){}if(!saved){s.value='0';await load(L[0])}}catch(e){}})();
 try{$('key').value=localStorage.getItem('aero-key')||'';$('model').value=localStorage.getItem('aero-model')||$('model').value}catch(e){}
 all();show('dash');
 </script>
