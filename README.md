@@ -32,6 +32,27 @@ Batasan: PDF hasil scan (gambar) tidak terbaca, dan teks lebih dari 60.000 karak
 - **Di GitHub Pages / file lokal**: isi **API key Anthropic** di tab Input Materi. Key dikirim langsung dari browser ke `api.anthropic.com` dan disimpan di `localStorage` browser sendiri.
 - **Tanpa API key**: gunakan **Impor hasil** untuk memuat file `.json` yang sudah diproses orang lain.
 
+## Perpustakaan materi (tanpa API key)
+
+Lab di GitHub Pages otomatis membaca folder `materi/` dan menampilkan dropdown **Pilih materi** di bagian atas. Tidak perlu upload dan tidak perlu API key.
+
+Menambah materi baru:
+
+1. Proses materi di link claude.ai artifact (gratis lewat akun Claude lo), lalu klik **Ekspor hasil (JSON)**.
+2. Taruh file JSON di folder `materi/`, mis. `bab-4-xxx.json`.
+3. Tambahkan satu baris di `materi/index.json`:
+
+```json
+[
+  { "nama": "Bab 3 - Requirement Analysis and Systems Architecture", "file": "bab-3-requirement-analysis.json" },
+  { "nama": "Bab 4 - ...", "file": "bab-4-xxx.json" }
+]
+```
+
+4. Commit dan push. Dropdown akan menampilkan materi baru.
+
+Jika `materi/index.json` tidak ada (mis. di claude.ai), dropdown disembunyikan dan lab memakai materi contoh bawaan.
+
 ## Deploy ke GitHub Pages
 
 1. Buat repo baru, mis. `aerospace-se-lab`.
@@ -45,7 +66,9 @@ Struktur repo:
 aerospace-se-lab/
 ├── index.html
 ├── README.md
-└── materi/            (opsional: simpan file hasil ekspor .json di sini)
+├── materi/
+│   ├── index.json
+│   └── bab-3-requirement-analysis.json
 ```
 
 ## Keamanan API key
